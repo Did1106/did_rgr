@@ -281,7 +281,7 @@ section h2::after {
     width: 50px;
     height: 8px;
     background-color: var(--accent-color);
-    border-radius: 5px;
+    border-radius: 50%; /* Changed to 50% for circle */
     transition: background-color 0.5s ease;
 }
 
@@ -535,8 +535,8 @@ footer {
 .slider-container {
     position: relative;
     width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
+    max-width: 900px; /* Обмежте максимальну ширину контейнера */
+    margin: 0 auto; /* Центрування */
     overflow: hidden;
     border-radius: 15px;
     box-shadow: var(--box-shadow);
@@ -546,7 +546,8 @@ footer {
 .slider-wrapper {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    padding: 1.5rem;
+    padding: 1.5rem; /* Додайте внутрішній відступ */
+    align-items: stretch; /* Вирівнюємо елементи по висоті */
 }
 
 .slider-item {
@@ -554,23 +555,28 @@ footer {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    align-items: center; /* Центрує вміст по горизонталі */
+    justify-content: flex-start; /* Вирівнює вміст догори */
+    text-align: center; /* Центрує текст */
+    padding: 1rem; /* Додайте внутрішній відступ для елементів слайда */
 }
 
 .slider-item .news-image {
     width: 100%;
-    max-height: 300px;
+    max-width: 400px; /* Обмежте максимальну ширину зображення */
+    height: 250px; /* Фіксована висота для зображення */
     overflow: hidden;
     border-radius: 10px;
     margin-bottom: 1rem;
+    display: flex; /* Для центрування зображення всередині контейнера */
+    justify-content: center;
+    align-items: center;
 }
 
 .slider-item .news-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 100%; /* Зображення займатиме всю ширину контейнера */
+    height: 100%; /* Зображення займатиме всю висоту контейнера */
+    object-fit: cover; /* Обрізати, щоб заповнити контейнер */
 }
 
 .news-image::before {
@@ -599,24 +605,51 @@ body.dark-theme .news-image::before {
     padding: 0 1rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Центрує вміст по горизонталі */
+    flex-grow: 1; /* Дозволяє контенту займати доступний простір */
+    justify-content: space-between; /* Розтягує вміст по вертикалі */
 }
 
 .slider-item .news-content h3 {
     font-size: 1.6rem;
     margin-bottom: 0.8rem;
+    text-align: center; /* Центрування заголовка */
 }
 
 .slider-item .news-content p {
     font-size: 1.1rem;
     color: var(--news-text-color);
     margin-bottom: 1.5rem;
-    max-width: 80%;
+    max-width: 90%; /* Обмежте ширину тексту */
+    text-align: center; /* Центрування тексту параграфа */
+    flex-grow: 1; /* Дозволяє параграфу займати доступний простір */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Обмежте кількість рядків */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.slider-item .news-content a {
+.slider-item .news-content a.read-more-button { /* Стилі для кнопки "Читати далі" */
     font-size: 1.1rem;
     white-space: nowrap;
+    margin-top: auto; /* Притиснути кнопку до низу, якщо news-content має flex-grow */
+    display: inline-block; /* Щоб padding працював */
+    padding: 0.8rem 1.5rem;
+    background-color: var(--accent-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    align-self: center; /* Центруємо кнопку */
+}
+
+.slider-item .news-content a.read-more-button:hover {
+    background-color: #8b4513; /* Темніший акцент */
+    transform: translateY(-2px);
+    text-decoration: none; /* Забираємо підкреслення при наведенні на кнопку */
 }
 
 .slider-button {
@@ -632,7 +665,7 @@ body.dark-theme .news-image::before {
     border-radius: 50%;
     z-index: 10;
     transition: background-color 0.3s ease;
-    display: block; /* Ensure it's not initially hidden by default */
+    display: block;
 }
 
 .slider-button:hover {
@@ -655,8 +688,7 @@ body.dark-theme .news-image::before {
     display: flex;
     gap: 8px;
     z-index: 10;
-    /* This will be managed by JS based on number of slides */
-    display: none;
+    display: none; /* Managed by JS based on number of slides */
 }
 
 .dot {
