@@ -71,6 +71,18 @@ if (mapContainer) {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.news-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+        
+        if (e.target.closest('a')) return;
+
+        const link = item.getAttribute('data-link');
+        if (link) {
+            window.open(link, '_blank');
+        }
+    });
+});
+    
     const allLinks = document.querySelectorAll('a');
 
     allLinks.forEach(link => {
