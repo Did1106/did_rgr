@@ -5,7 +5,7 @@ function setTheme(themeName) {
     body.classList.remove('light-theme', 'dark-theme');
     body.classList.add(themeName);
     localStorage.setItem('theme', themeName);
-    if (themeSwitch) { // Check if themeSwitch exists before setting checked property
+    if (themeSwitch) {
         themeSwitch.checked = (themeName === 'dark-theme');
     }
 }
@@ -14,7 +14,6 @@ const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
     setTheme(savedTheme);
 } else {
-    // Determine default theme based on user's system preference if no theme saved
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         setTheme('dark-theme');
     } else {
@@ -22,7 +21,7 @@ if (savedTheme) {
     }
 }
 
-if (themeSwitch) { // Ensure themeSwitch exists before adding event listener
+if (themeSwitch) {
     themeSwitch.addEventListener('change', function() {
         if (this.checked) {
             setTheme('dark-theme');
@@ -33,15 +32,13 @@ if (themeSwitch) { // Ensure themeSwitch exists before adding event listener
 }
 
 
-// Intersection Observer for fade-in animations
 const sections = document.querySelectorAll('section');
-// Use a more specific selector for news items on the news page to avoid conflicts if IDs are similar
-const newsItemsOnNewsPage = document.querySelectorAll('#news .news-item'); 
+const newsItemsOnNewsPage = document.querySelectorAll('#news .news-item');
 const contactListItems = document.querySelectorAll('#contact ul li');
 const mapContainer = document.getElementById('map-container');
 
 const observerOptions = {
-    threshold: 0.1 // Trigger when 10% of the element is visible
+    threshold: 0.1
 };
 
 const generalObserver = new IntersectionObserver(entries => {
@@ -49,41 +46,34 @@ const generalObserver = new IntersectionObserver(entries => {
         if (entry.isIntersecting) {
             entry.target.style.opacity = '1';
             entry.target.style.transform = 'translateY(0)';
-            generalObserver.unobserve(entry.target); // Corrected: use generalObserver instead of undefined 'observer'
+            generalObserver.unobserve(entry.target);
         }
     });
 }, observerOptions);
 
-// Observe sections on all pages
 sections.forEach(section => {
     generalObserver.observe(section);
 });
 
-// Observe news items ONLY if they are on the current page (news.html)
 if (window.location.pathname.includes('news.html')) {
     newsItemsOnNewsPage.forEach(item => {
         generalObserver.observe(item);
     });
 }
 
-// Observe contact list items
 contactListItems.forEach(item => {
     generalObserver.observe(item);
 });
 
-// Observe map container
-if (mapContainer) { // Check if mapContainer exists before observing
+if (mapContainer) {
     generalObserver.observe(mapContainer);
 }
 
 
-// Smooth page transitions
 document.addEventListener('DOMContentLoaded', () => {
     const allLinks = document.querySelectorAll('a');
 
     allLinks.forEach(link => {
-        // Only apply to internal links that are not anchor links on the same page
-        // and do not have "target=_blank" (which means opening in a new tab)
         if (link.hostname === window.location.hostname && 
             link.getAttribute('href') && 
             !link.getAttribute('href').startsWith('#') &&
@@ -91,102 +81,100 @@ document.addEventListener('DOMContentLoaded', () => {
             
             link.addEventListener('click', function(event) {
                 const href = this.getAttribute('href');
-                if (href) { // Ensure href is not null
-                    event.preventDefault(); // Prevent default link behavior
-                    document.body.classList.add('fade-out'); // Add fade-out class to body
+                if (href) {
+                    event.preventDefault();
+                    document.body.classList.add('fade-out');
 
                     setTimeout(() => {
-                        window.location.href = href; // Navigate after fade-out
-                    }, 300); // Match this duration with your fadeOut animation duration in CSS
+                        window.location.href = href;
+                    }, 300);
                 }
             });
         }
     });
 
-    // Remove fade-out class when page loads to show content
-    // This handles initial page load and when navigating back/forward in history
     if (document.body.classList.contains('fade-out')) {
         document.body.classList.remove('fade-out');
     }
 
     // --- Slider functionality (only on index.html) ---
     const newsSliderSection = document.getElementById('news-slider');
-    if (newsSliderSection) { // Ensure this section exists on the current page (index.html)
+    if (newsSliderSection) {
         const sliderWrapper = newsSliderSection.querySelector('.slider-wrapper');
         const prevButton = newsSliderSection.querySelector('.slider-button.prev');
         const nextButton = newsSliderSection.querySelector('.slider-button.next');
         const sliderDotsContainer = newsSliderSection.querySelector('.slider-dots');
 
-        let newsData = [];
-        let currentSlide = 0;
-        const numberOfSlidesToShow = 3; // We explicitly want to show the first 3 news items from news.html
-
-        async function fetchNewsData() {
-            try {
-                // Ensure news.html is in the same directory or provide correct path
-                const response = await fetch('news.html');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const text = await response.text();
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(text, 'text/html');
-                // Select all news items from the parsed news.html content
-                const newsArticlesFromFetchedPage = doc.querySelectorAll('#news .news-item'); 
-
-                // Take only the first `numberOfSlidesToShow` (i.e., 3) news items for the slider
-                Array.from(newsArticlesFromFetchedPage).slice(0, numberOfSlidesToShow).forEach(article => {
-                    const imageElement = article.querySelector('.news-image img');
-                    const linkElement = article.querySelector('.news-content a');
-                    const titleElement = article.querySelector('.news-content h3 a');
-                    const descriptionElement = article.querySelector('.news-content p');
-
-                    const imageSrc = imageElement ? imageElement.src : '';
-                    const imageAlt = imageElement ? imageElement.alt : '';
-                    const linkHref = linkElement ? linkElement.href : '';
-                    const title = titleElement ? titleElement.textContent.trim() : '';
-                    const description = descriptionElement ? descriptionElement.textContent.trim() : '';
-
-                    if (linkHref && title) { // Only add if essential data (link and title) is present
-                        newsData.push({ imageSrc, imageAlt, linkHref, title, description });
-                    }
-                });
-
-                if (newsData.length > 0) {
-                    displayNewsForSlider(); // Display the selected news items
-                    startAutoSlide(); // Start auto-slide only after news are loaded
-                } else {
-                    sliderWrapper.innerHTML = '<p style="text-align: center; color: var(--text-color);">Не знайдено новин для слайдера.</p>';
-                }
-
-            } catch (error) {
-                console.error('Помилка при завантаженні новин для слайдера:', error);
-                sliderWrapper.innerHTML = '<p style="text-align: center; color: var(--text-color);">Не вдалося завантажити новини для слайдера. Переконайтеся, що файл news.html існує та доступний через локальний веб-сервер.</p>';
+        // Static data for the slider images and text with specific article URLs
+        const imageData = [
+            {
+                imageSrc: 'https://ictv.ua/wp-content/uploads/2025/03/24/AD_visuals_8x_1200h628-copy-1.jpg',
+                imageAlt: 'AI Day 2025',
+                title: 'AI Day 2025: Майбутнє в Україні',
+                description: 'На конференції AI Day 2025 обговорювалися ключові зміни, які штучний інтелект принесе в державу, бізнес та освіту в Україні.',
+                articleUrl: 'https://ictv.ua/ua/2025/03/24/ai-day-2025-yak-shtuchnyj-intelekt-zminyt-derzhavu-biznes-ta-osvitu-ukrayiny/' // Specific article URL
+            },
+            {
+                imageSrc: 'https://i.ytimg.com/vi/MWucCbCx_TM/maxresdefault.jpg',
+                imageAlt: 'Nvidia AI виступ',
+                title: 'Наступний стрибок у ШІ від Nvidia',
+                description: 'Керівник Nvidia AI Technology Centre Саймон Сі поділився своїм баченням еволюції штучного інтелекту – від хмарних рішень до персональних агентів.',
+                articleUrl: 'https://forbes.ua/innovations/nastupniy-stribok-u-shi-vid-nvidia-kerivnik-nvidia-ai-technology-centre-saymon-si-rozpoviv-pro-maybutne-galuzi-19122024-25501' // Specific article URL
+            },
+            {
+                imageSrc: 'https://pub-e93d5c9fdf134c89830082377f6df465.r2.dev/2025/04/Zhipu-AI-Reveals-Free-AI-Agent-in-China-1024x576.webp',
+                imageAlt: 'Zhipu AI',
+                title: 'Китайський стартап Zhipu AI випустив AutoGLM',
+                description: 'Zhipu AI представив безкоштовного ШІ-агента AutoGLM, який може стати альтернативою західним розробкам.',
+                articleUrl: 'https://forbes.ua/innovations/kitayskiy-startap-zhipu-ai-vipustiv-auto-glm-z-mozhlivistyu-samostiy-no-vikonuvati-komandi-29042025-27464' // Specific article URL
+            },
+            {
+                imageSrc: 'https://miro.medium.com/v2/resize:fit:1400/0*5Ty8Mau36Px3Ha5u',
+                imageAlt: 'Perplexity AI',
+                title: 'Perplexity AI прагне до смартфонів',
+                description: 'Компанія Perplexity AI веде переговори з Samsung та Motorola щодо інтеграції свого помічника безпосередньо в мобільні пристрої.',
+                articleUrl: 'https://forbes.ua/innovations/perplexity-ai-pragne-do-smartfoniv-chi-zaminit-vin-google-u-ponovi-galuzi-20052025-27855' // Specific article URL
+            },
+            {
+                imageSrc: 'https://www.actuia.com/storage/uploads/2021/12/Clearview-AI.jpg',
+                imageAlt: 'Clearview AI',
+                title: 'Clearview AI: суперечлива, але корисна',
+                description: 'Технологія розпізнавання облич від Clearview AI викликає дебати, але активно використовується українськими військовими.',
+                articleUrl: 'https://forbes.ua/innovations/polemika-navkolo-clearview-ai-chi-mozhut-ukrainski-viyskovi-vikoristovuvati-tekhnologiyu-rozpiznavannya-oblich-iz-ssha-13052025-27757' // Specific article URL
             }
-        }
+        ];
 
-        // Function to display the news items in the slider
-        function displayNewsForSlider() {
-            if (newsData.length === 0) return;
+        let currentSlide = 0;
 
-            sliderWrapper.innerHTML = ''; // Clear previous items in the wrapper
-            sliderDotsContainer.innerHTML = ''; // Clear previous dots
+        function displaySliderContent() {
+            if (imageData.length === 0) {
+                sliderWrapper.innerHTML = '<p style="text-align: center; color: var(--text-color);">Зображення для слайдера не знайдено.</p>';
+                if (prevButton) prevButton.style.display = 'none';
+                if (nextButton) nextButton.style.display = 'none';
+                if (sliderDotsContainer) sliderDotsContainer.style.display = 'none';
+                return;
+            }
 
-            newsData.forEach((news, index) => {
+            sliderWrapper.innerHTML = '';
+            sliderDotsContainer.innerHTML = '';
+
+            imageData.forEach((item, index) => {
                 const slideItem = document.createElement('div');
                 slideItem.classList.add('slider-item');
                 slideItem.innerHTML = `
                     <div class="news-image">
-                        <a href="${news.linkHref}" target="_blank" rel="noopener noreferrer">
-                            <img src="${news.imageSrc}" alt="${news.imageAlt}" onerror="this.onerror=null;this.src='https://via.placeholder.com/220x220?text=Зображення+не+знайдено';" />
+                        <a href="${item.articleUrl}" target="_blank" rel="noopener noreferrer">
+                            <img src="${item.imageSrc}" alt="${item.imageAlt}" onerror="this.onerror=null;this.src='https://via.placeholder.com/220x220?text=Зображення+не+знайдено';" />
                         </a>
                     </div>
                     <div class="news-content">
-                        <h3><a href="${news.linkHref}" target="_blank" rel="noopener noreferrer">${news.title}</a></h3>
-                        <p>${news.description}</p>
+                        <h3><a href="${item.articleUrl}" target="_blank" rel="noopener noreferrer">${item.title}</a></h3>
+                        <p>${item.description}</p>
+                        <a href="news.html" class="read-more-button">Читати далі</a>
                     </div>
                 `;
                 sliderWrapper.appendChild(slideItem);
+                generalObserver.observe(slideItem); // Observe newly created slider items
 
                 const dot = document.createElement('span');
                 dot.classList.add('dot');
@@ -197,16 +185,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 sliderDotsContainer.appendChild(dot);
             });
 
-            currentSlide = 0; // Reset to the first slide
-            updateSlider(); // Update slider position and dot active state
+            currentSlide = 0;
+            updateSlider();
 
-            // Show/hide navigation buttons and dots based on number of slides
-            if (newsData.length > 1) {
+            if (imageData.length > 1) {
                 if (prevButton) prevButton.style.display = 'block';
                 if (nextButton) nextButton.style.display = 'block';
                 if (sliderDotsContainer) sliderDotsContainer.style.display = 'flex';
             } else {
-                // If there's only one slide, hide buttons and dots
                 if (prevButton) prevButton.style.display = 'none';
                 if (nextButton) nextButton.style.display = 'none';
                 if (sliderDotsContainer) sliderDotsContainer.style.display = 'none';
@@ -214,11 +200,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function updateSlider() {
-            // Only attempt to transform if there are slides
-            if (newsData.length === 0) {
+            if (imageData.length === 0) {
                 return;
             }
-            const offset = -currentSlide * 100; // Each slide takes 100% width
+            const offset = -currentSlide * 100;
             sliderWrapper.style.transform = `translateX(${offset}%)`;
 
             document.querySelectorAll('#news-slider .dot').forEach((dot, index) => {
@@ -227,49 +212,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function goToSlide(index) {
-            if (index < 0 || index >= newsData.length) {
-                return; // Prevent out-of-bounds index
+            if (index < 0 || index >= imageData.length) {
+                return;
             }
             currentSlide = index;
             updateSlider();
         }
 
-        // Add event listeners for slider buttons
         if (prevButton) {
             prevButton.addEventListener('click', () => {
-                // Calculate previous slide index, wrapping around to the end if at the beginning
-                currentSlide = (currentSlide - 1 + newsData.length) % newsData.length;
+                currentSlide = (currentSlide - 1 + imageData.length) % imageData.length;
                 updateSlider();
             });
         }
 
         if (nextButton) {
-            nextButton.addEventListener('click', () => {
-                // Calculate next slide index, wrapping around to the beginning if at the end
-                currentSlide = (currentSlide + 1) % newsData.length;
+            nextSlide = () => {
+                currentSlide = (currentSlide + 1) % imageData.length;
                 updateSlider();
-            });
+            };
+            nextButton.addEventListener('click', nextSlide);
         }
 
         let autoSlideInterval;
         function startAutoSlide() {
-            // Only start auto-slide if there's more than one slide
-            if (newsData.length > 1) {
-                clearInterval(autoSlideInterval); // Clear any existing interval to prevent duplicates
+            if (imageData.length > 1) {
+                clearInterval(autoSlideInterval);
                 autoSlideInterval = setInterval(() => {
-                    if (nextButton) nextButton.click(); // Simulate click on next button
-                }, 5000); // Change slide every 5 seconds (5000 milliseconds)
+                    if (nextButton) nextSlide(); // Call nextSlide function directly
+                }, 5000);
             }
         }
 
         const sliderContainer = document.querySelector('#news-slider .slider-container');
-        if (sliderContainer) { // Check if slider container exists
-            // Pause auto-slide on mouse enter, resume on mouse leave
+        if (sliderContainer) {
             sliderContainer.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
             sliderContainer.addEventListener('mouseleave', startAutoSlide);
         }
 
-        // Initial call to fetch and display news when the DOM is fully loaded, ONLY on index.html
-        fetchNewsData();
+        // Initial call to display slider content
+        displaySliderContent();
+        startAutoSlide(); // Start auto-slide after content is displayed
     }
 });
