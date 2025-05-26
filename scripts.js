@@ -1,12 +1,6 @@
 const themeSwitch = document.getElementById('checkbox');
 const body = document.body
-document.getElementById('news-item').addEventListener('click', (e) => {
-    
-    const link = e.currentTarget.getAttribute('data-link');
-    if (link) {
-        window.open(link, '_blank'); 
-    }
-});
+
 
 
 
