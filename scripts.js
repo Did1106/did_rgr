@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="news-content">
                         <h3><a href="${item.articleUrl}" target="_blank" rel="noopener noreferrer">${item.title}</a></h3>
                         <p>${item.description}</p>
-                        <a href="news.html" class="read-more-button">Читати далі</a>
+                        <a href=`${articleUrl}` class="read-more-button">Читати далі</a>
                     </div>
                 `;
                 sliderWrapper.appendChild(slideItem);
