@@ -132,5 +132,14 @@
 </footer>
 
 <script src="scripts.js"></script>
+<script>
+    document.getElementById('news-item').addEventListener('click', (e) => {
+    
+    const link = e.currentTarget.getAttribute('data-link');
+    if (link) {
+        window.open(link, '_blank'); 
+    }
+});
+</script>
 </body>
 </html>
