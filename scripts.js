@@ -117,35 +117,35 @@ document.addEventListener('DOMContentLoaded', () => {
                 imageAlt: 'AI Day 2025',
                 title: 'AI Day 2025: Майбутнє в Україні',
                 description: 'На конференції AI Day 2025 обговорювалися ключові зміни, які штучний інтелект принесе в державу, бізнес та освіту в Україні.',
-                articleUrl: 'https://ictv.ua/ua/2025/03/24/ai-day-2025-yak-shtuchnyj-intelekt-zminyt-derzhavu-biznes-ta-osvitu-ukrayiny/' // Specific article URL
+                articleUrl: 'https://forbes.ua/news/ai-day-2025-yak-shtuchniy-intelekt-zminyue-ukrainu-03042025-28565' // Specific article URL
             },
             {
                 imageSrc: 'https://i.ytimg.com/vi/MWucCbCx_TM/maxresdefault.jpg',
                 imageAlt: 'Nvidia AI виступ',
                 title: 'Наступний стрибок у ШІ від Nvidia',
                 description: 'Керівник Nvidia AI Technology Centre Саймон Сі поділився своїм баченням еволюції штучного інтелекту – від хмарних рішень до персональних агентів.',
-                articleUrl: 'https://forbes.ua/innovations/nastupniy-stribok-u-shi-vid-nvidia-kerivnik-nvidia-ai-technology-centre-saymon-si-rozpoviv-pro-maybutne-galuzi-19122024-25501' // Specific article URL
+                articleUrl: 'https://forbes.ua/innovations/pochinaemo-viroblyati-intelekt-yakiy-nastupniy-stribok-u-shi-vistup-kerivnika-nvidia-ai-technology-centre-saymona-si-na-ai-day-vid-forbes-ukraine-31032025-28438' // Specific article URL
             },
             {
                 imageSrc: 'https://pub-e93d5c9fdf134c89830082377f6df465.r2.dev/2025/04/Zhipu-AI-Reveals-Free-AI-Agent-in-China-1024x576.webp',
                 imageAlt: 'Zhipu AI',
                 title: 'Китайський стартап Zhipu AI випустив AutoGLM',
                 description: 'Zhipu AI представив безкоштовного ШІ-агента AutoGLM, який може стати альтернативою західним розробкам.',
-                articleUrl: 'https://forbes.ua/innovations/kitayskiy-startap-zhipu-ai-vipustiv-auto-glm-z-mozhlivistyu-samostiy-no-vikonuvati-komandi-29042025-27464' // Specific article URL
+                articleUrl: 'https://forbes.ua/news/kitayskiy-startap-zhipu-ai-vipustiv-bezkoshtovnogo-shi-agenta-autoglm-31032025-28458' // Specific article URL
             },
             {
                 imageSrc: 'https://miro.medium.com/v2/resize:fit:1400/0*5Ty8Mau36Px3Ha5u',
                 imageAlt: 'Perplexity AI',
                 title: 'Perplexity AI прагне до смартфонів',
                 description: 'Компанія Perplexity AI веде переговори з Samsung та Motorola щодо інтеграції свого помічника безпосередньо в мобільні пристрої.',
-                articleUrl: 'https://forbes.ua/innovations/perplexity-ai-pragne-do-smartfoniv-chi-zaminit-vin-google-u-ponovi-galuzi-20052025-27855' // Specific article URL
+                articleUrl: 'https://forbes.ua/news/perplexity-ai-khoche-potrapiti-u-smartfoni-samsung-i-motorola-bloomberg-17042025-28985' // Specific article URL
             },
             {
                 imageSrc: 'https://www.actuia.com/storage/uploads/2021/12/Clearview-AI.jpg',
                 imageAlt: 'Clearview AI',
                 title: 'Clearview AI: суперечлива, але корисна',
                 description: 'Технологія розпізнавання облич від Clearview AI викликає дебати, але активно використовується українськими військовими.',
-                articleUrl: 'https://forbes.ua/innovations/polemika-navkolo-clearview-ai-chi-mozhut-ukrainski-viyskovi-vikoristovuvati-tekhnologiyu-rozpiznavannya-oblich-iz-ssha-13052025-27757' // Specific article URL
+                articleUrl: 'https://forbes.ua/innovations/tekhnologiyu-rozpiznavannya-oblich-clearview-ai-vvazhayut-nelegalnoyu-i-nebezpechnoyu-ii-budut-vikoristovuvati-ukrainski-viyskovi-16032022-4696' // Specific article URL
             }
         ];
 
