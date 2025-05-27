@@ -640,7 +640,7 @@ body.dark-theme .news-image::before {
 }
 
 .slider-item .news-content a.read-more-button:hover {
-    background-color: #8b4513; /* Темніший акцент */
+    background-color: #fafafa; /* Темніший акцент */
     transform: translateY(-2px);
     text-decoration: none; /* Забираємо підкреслення при наведенні на кнопку */
 }
